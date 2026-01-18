@@ -17,4 +17,4 @@ export const MAX_PLAYERS = 4;
 
 // Room code generation characters (excluding ambiguous: O, 0, I, 1)
 export const ROOM_CODE_CHARS = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-export const ROOM_CODE_LENGTH = 6;
+export const ROOM_CODE_LENGTH = 4;
