@@ -109,8 +109,8 @@ class PhoneController {
       .trim();
     const playerName = (this.elements.playerNameInput as HTMLInputElement).value.trim() || 'Player';
 
-    if (roomCode.length !== 6) {
-      this.elements.joinError.textContent = 'Room code must be 6 characters';
+    if (roomCode.length !== 4) {
+      this.elements.joinError.textContent = 'Room code must be 4 characters';
       return;
     }
 
