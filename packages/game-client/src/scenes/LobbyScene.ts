@@ -4,6 +4,7 @@ import { PLAYER_COLORS, type PlayerNumber } from '@point-blank/shared';
 
 export class LobbyScene extends Phaser.Scene {
   private roomCodeText!: Phaser.GameObjects.Text;
+  private joinUrlText!: Phaser.GameObjects.Text;
   private playersContainer!: Phaser.GameObjects.Container;
   private startButton!: Phaser.GameObjects.Container;
   private playerCursors: Map<string, Phaser.GameObjects.Container> = new Map();
@@ -52,8 +53,8 @@ export class LobbyScene extends Phaser.Scene {
     }).setOrigin(0.5);
 
     // Join URL
-    const joinUrl = `${window.location.origin.replace(':3002', ':3003')}?room=${roomCode}`;
-    this.add.text(width / 2, 530, joinUrl, {
+    const joinUrl = `${window.location.origin.replace(':3002', ':3003')}/controller?room=${roomCode}`;
+    this.joinUrlText = this.add.text(width / 2, 530, joinUrl, {
       fontFamily: 'Arial',
       fontSize: '20px',
       color: '#4ecdc4',
@@ -84,6 +85,13 @@ export class LobbyScene extends Phaser.Scene {
 
     // Subscribe to state changes
     this.unsubscribe = NetworkService.onStateChange((state) => {
+      // Update room code when state syncs (fixes race condition on initial load)
+      if (state.roomCode && state.roomCode !== this.roomCodeText.text) {
+        this.roomCodeText.setText(state.roomCode.toUpperCase());
+        // Update join URL too
+        const joinUrl = `${window.location.origin.replace(':3002', ':3003')}/controller?room=${state.roomCode.toUpperCase()}`;
+        this.joinUrlText?.setText(joinUrl);
+      }
       if (state.phase === 'mode-select') {
         this.scene.start('ModeSelectScene');
       }
