@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <title>Point Blank Controller</title>
+  <link rel="stylesheet" href="/src/styles.css">
+</head>
+<body>
+  <div id="app">
+    <!-- Join Screen -->
+    <div id="join-screen" class="screen active">
+      <h1>POINT BLANK</h1>
+      <h2>Join Game</h2>
+      <input type="text" id="room-code-input" placeholder="Enter Room Code" maxlength="6" autocomplete="off" autocapitalize="characters">
+      <input type="text" id="player-name-input" placeholder="Your Name" maxlength="12" autocomplete="off">
+      <button id="join-btn">JOIN</button>
+      <p id="join-error" class="error"></p>
+    </div>
+
+    <!-- Waiting Screen -->
+    <div id="waiting-screen" class="screen">
+      <h2>Connected!</h2>
+      <div id="player-color-indicator"></div>
+      <p id="player-info"></p>
+      <p>Waiting for game to start...</p>
+      <button id="calibrate-btn">CALIBRATE</button>
+      <p class="hint">Hold your phone comfortably and tap Calibrate</p>
+    </div>
+
+    <!-- Controller Screen -->
+    <div id="controller-screen" class="screen">
+      <div id="crosshair-container">
+        <div id="crosshair"></div>
+      </div>
+      <div id="game-info">
+        <span id="score-display">Score: 0</span>
+        <span id="lives-display"></span>
+      </div>
+      <div id="shoot-area">
+        <p>TAP TO SHOOT</p>
+      </div>
+    </div>
+
+    <!-- Gyroscope Permission Screen (iOS) -->
+    <div id="permission-screen" class="screen">
+      <h2>Enable Motion</h2>
+      <p>This game uses your phone's motion sensors to aim.</p>
+      <button id="permission-btn">Enable Motion Sensors</button>
+    </div>
+  </div>
+  <script type="module" src="/src/main.ts"></script>
+</body>
+</html>

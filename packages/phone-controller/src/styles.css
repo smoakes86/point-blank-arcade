@@ -1,0 +1,253 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  color: white;
+  touch-action: none;
+  user-select: none;
+}
+
+#app {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.screen {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  padding: 20px;
+  text-align: center;
+}
+
+.screen.active {
+  display: flex;
+}
+
+h1 {
+  font-size: 2.5rem;
+  font-weight: 900;
+  letter-spacing: 4px;
+  margin-bottom: 10px;
+  background: linear-gradient(45deg, #ff4444, #ffff44, #44ff44, #4444ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+h2 {
+  font-size: 1.5rem;
+  margin-bottom: 30px;
+  opacity: 0.9;
+}
+
+input {
+  width: 80%;
+  max-width: 300px;
+  padding: 16px 20px;
+  margin: 10px 0;
+  font-size: 1.2rem;
+  border: none;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  text-align: center;
+  outline: none;
+}
+
+input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+input:focus {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+#room-code-input {
+  text-transform: uppercase;
+  letter-spacing: 8px;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+button {
+  padding: 16px 48px;
+  margin: 20px 0;
+  font-size: 1.2rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #4444ff 0%, #6666ff 100%);
+  color: white;
+  cursor: pointer;
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+
+button:active {
+  transform: scale(0.95);
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.error {
+  color: #ff6666;
+  margin-top: 10px;
+  min-height: 20px;
+}
+
+.hint {
+  font-size: 0.9rem;
+  opacity: 0.6;
+  margin-top: 10px;
+}
+
+/* Player color indicator */
+#player-color-indicator {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  margin: 20px 0;
+  box-shadow: 0 0 30px currentColor;
+}
+
+#player-info {
+  font-size: 1.3rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+/* Controller screen */
+#controller-screen {
+  position: relative;
+  padding: 0;
+}
+
+#crosshair-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 70%;
+  pointer-events: none;
+}
+
+#crosshair {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+#crosshair::before,
+#crosshair::after {
+  content: '';
+  position: absolute;
+  background: currentColor;
+}
+
+#crosshair::before {
+  width: 100%;
+  height: 4px;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+}
+
+#crosshair::after {
+  width: 4px;
+  height: 100%;
+  left: 50%;
+  top: 0;
+  transform: translateX(-50%);
+}
+
+#game-info {
+  position: absolute;
+  top: 10px;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 20px;
+  font-size: 1.1rem;
+  font-weight: bold;
+}
+
+#lives-display {
+  font-size: 1.5rem;
+}
+
+#shoot-area {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 30%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.05);
+  border-top: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+#shoot-area p {
+  font-size: 1.5rem;
+  font-weight: bold;
+  opacity: 0.7;
+  letter-spacing: 4px;
+}
+
+#shoot-area.shooting {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Calibrate button on waiting screen */
+#calibrate-btn {
+  background: linear-gradient(135deg, #44aa44 0%, #66cc66 100%);
+}
+
+/* Permission screen */
+#permission-btn {
+  background: linear-gradient(135deg, #ff8844 0%, #ffaa66 100%);
+}
+
+/* Animation for shooting feedback */
+@keyframes shoot-flash {
+  0% { background: rgba(255, 255, 255, 0.4); }
+  100% { background: rgba(255, 255, 255, 0.05); }
+}
+
+.shoot-flash {
+  animation: shoot-flash 0.15s ease-out;
+}
+
+/* Hit feedback */
+@keyframes hit-pulse {
+  0% { transform: translate(-50%, -50%) scale(1); }
+  50% { transform: translate(-50%, -50%) scale(1.5); }
+  100% { transform: translate(-50%, -50%) scale(1); }
+}
+
+.hit-pulse {
+  animation: hit-pulse 0.2s ease-out;
+}

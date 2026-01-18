@@ -1,0 +1,17 @@
+{
+  "name": "point-blank",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Point Blank arcade game recreation for browser with phone controllers",
+  "scripts": {
+    "dev": "pnpm -r --parallel dev",
+    "dev:server": "pnpm --filter server dev",
+    "dev:game": "pnpm --filter game-client dev",
+    "dev:controller": "pnpm --filter phone-controller dev",
+    "build": "pnpm -r build",
+    "clean": "pnpm -r clean"
+  },
+  "keywords": ["game", "arcade", "phaser", "multiplayer", "point-blank"],
+  "author": "",
+  "license": "MIT"
+}
