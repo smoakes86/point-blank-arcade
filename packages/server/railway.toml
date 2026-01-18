@@ -2,7 +2,7 @@
 builder = "nixpacks"
 
 [build.nixpacks]
-buildCmd = "cd ../.. && pnpm install && pnpm --filter @point-blank/server build"
+buildCmd = "cd ../.. && pnpm install && pnpm -r build"
 
 [deploy]
 startCommand = "node dist/index.js"
