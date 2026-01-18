@@ -97,8 +97,8 @@ export class SequenceRecall extends MiniGame {
         width: 70,
         height: 70,
         points: 10,
-        playerColor: this.buttonColors[index],
-        playerNumber: index + 1,
+        color: this.buttonColors[index],
+        ownerPlayerNumber: index + 1,
       });
 
       // Make buttons dimmer during showing phase

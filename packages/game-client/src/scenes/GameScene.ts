@@ -145,7 +145,7 @@ export class GameScene extends Phaser.Scene {
       }).setOrigin(0.5);
       text.setDepth(2000);
 
-      AudioService.play('countdown');
+      AudioService.playCountdown(index < 3 ? 3 - index : 0);
 
       this.tweens.add({
         targets: text,
@@ -217,7 +217,7 @@ export class GameScene extends Phaser.Scene {
         this.currentMiniGame = new WildWestShowdown(config);
         break;
       case 'number-sequence':
-        this.currentMiniGame = new NumberSequence(config);
+        this.currentMiniGame = new NumberSequence({ ...config, maxNumber: 16 });
         break;
       case 'math-problems':
         this.currentMiniGame = new MathProblems(config);
@@ -226,7 +226,7 @@ export class GameScene extends Phaser.Scene {
         this.currentMiniGame = new KeyboardSpelling(config);
         break;
       case 'card-matching':
-        this.currentMiniGame = new CardMatching(config);
+        this.currentMiniGame = new CardMatching({ ...config, pairsCount: 6 });
         break;
       case 'sequence-recall':
         this.currentMiniGame = new SequenceRecall(config);
@@ -319,9 +319,9 @@ export class GameScene extends Phaser.Scene {
 
     // Play sound
     if (correct) {
-      AudioService.play('hit');
+      AudioService.playHit();
     } else {
-      AudioService.play('miss');
+      AudioService.playMiss();
     }
 
     // Update player score display
@@ -356,7 +356,7 @@ export class GameScene extends Phaser.Scene {
     }
 
     // Miss
-    AudioService.play('miss');
+    AudioService.playMiss();
   }
 
   private processMiniGameHit(targetId: string, x: number, y: number, playerNumber: number): void {
@@ -427,16 +427,7 @@ export class GameScene extends Phaser.Scene {
     const players = NetworkService.getPlayers();
     this.updatePlayerCursors(players);
 
-    // Handle shooting from players
-    players.forEach((player) => {
-      if (player.shooting) {
-        const width = this.cameras.main.width;
-        const height = this.cameras.main.height;
-        const x = ((player.aimX + 1) / 2) * width;
-        const y = ((player.aimY + 1) / 2) * height;
-        this.handleShoot(x, y, player.playerNumber);
-      }
-    });
+    // Shooting is handled via network messages, not polled from player state
   }
 
   private endGame(): void {
@@ -449,7 +440,7 @@ export class GameScene extends Phaser.Scene {
     const passed = this.quotaMet >= this.quota;
 
     // Send result to server
-    NetworkService.sendMessage('stage-complete', {
+    NetworkService.send('stage-complete', {
       passed,
       quotaMet: this.quotaMet,
       quota: this.quota,
