@@ -1,7 +1,20 @@
 import { Client, Room } from 'colyseus.js';
 import type { GameMode } from '@point-blank/shared';
 
-const SERVER_URL = import.meta.env.VITE_SERVER_URL || 'ws://localhost:3001';
+// Auto-detect server URL based on current host
+function getServerUrl(): string {
+  if (import.meta.env.VITE_SERVER_URL) {
+    return import.meta.env.VITE_SERVER_URL;
+  }
+  // In production, use same host with WebSocket protocol
+  if (typeof window !== 'undefined' && window.location.hostname !== 'localhost') {
+    const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+    return `${protocol}//${window.location.host}`;
+  }
+  return 'ws://localhost:3001';
+}
+
+const SERVER_URL = getServerUrl();
 
 export interface PlayerData {
   id: string;

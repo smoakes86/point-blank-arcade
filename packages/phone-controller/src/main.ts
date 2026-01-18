@@ -2,8 +2,21 @@ import { Client, Room } from 'colyseus.js';
 import { PLAYER_COLORS, type PlayerNumber } from '@point-blank/shared';
 import { GyroscopeService } from './services/GyroscopeService.js';
 
-// Server URL - change for production
-const SERVER_URL = import.meta.env.VITE_SERVER_URL || 'ws://localhost:3001';
+// Auto-detect server URL based on current host
+function getServerUrl(): string {
+  if (import.meta.env.VITE_SERVER_URL) {
+    return import.meta.env.VITE_SERVER_URL;
+  }
+  // In production, connect to the main server (remove /controller path)
+  if (typeof window !== 'undefined' && window.location.hostname !== 'localhost') {
+    const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+    const host = window.location.host;
+    return `${protocol}//${host}`;
+  }
+  return 'ws://localhost:3001';
+}
+
+const SERVER_URL = getServerUrl();
 
 class PhoneController {
   private client: Client;
