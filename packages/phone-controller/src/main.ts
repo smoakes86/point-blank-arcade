@@ -118,7 +118,15 @@ class PhoneController {
       this.elements.joinError.textContent = '';
       (this.elements.joinBtn as HTMLButtonElement).disabled = true;
 
-      this.room = await this.client.joinById(roomCode.toLowerCase(), {
+      // Look up the Colyseus room ID from the custom room code
+      const apiUrl = window.location.origin.replace('/controller', '');
+      const response = await fetch(`${apiUrl}/api/room/${roomCode}`);
+      if (!response.ok) {
+        throw new Error('Room not found');
+      }
+      const { roomId } = await response.json();
+
+      this.room = await this.client.joinById(roomId, {
         playerName,
       });
 

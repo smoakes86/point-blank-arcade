@@ -1,4 +1,4 @@
-import { Server } from '@colyseus/core';
+import { Server, matchMaker } from '@colyseus/core';
 import { WebSocketTransport } from '@colyseus/ws-transport';
 import express from 'express';
 import cors from 'cors';
@@ -22,6 +22,25 @@ app.get('/health', (_req, res) => {
 
 app.get('/api/status', (_req, res) => {
   res.json({ status: 'ok', message: 'Point Blank Server' });
+});
+
+// Look up Colyseus room ID by custom room code
+app.get('/api/room/:code', async (req, res) => {
+  const code = req.params.code.toUpperCase();
+  try {
+    const rooms = await matchMaker.query({ name: 'game' });
+    for (const room of rooms) {
+      // Access the room's state to check the custom roomCode
+      const gameRoom = matchMaker.getRoomById(room.roomId);
+      if (gameRoom && (gameRoom.state as { roomCode?: string })?.roomCode?.toUpperCase() === code) {
+        return res.json({ roomId: room.roomId });
+      }
+    }
+    res.status(404).json({ error: 'Room not found' });
+  } catch (error) {
+    console.error('Error looking up room:', error);
+    res.status(500).json({ error: 'Server error' });
+  }
 });
 
 // Serve static files for game client and phone controller
