@@ -65,10 +65,11 @@ export class GyroscopeService {
 
   calibrate() {
     // Set current orientation as the center point
-    // Will be applied on next orientation event
+    // Calculate new offset by adding current aim to existing offset
+    // For Y: since y = -(beta - offset - 45) / SENS, we need -y * SENS + offset to get the neutral beta
     this.calibrationOffset = {
-      beta: this.currentAim.y * this.SENSITIVITY + 45, // Store raw beta
-      gamma: this.currentAim.x * this.SENSITIVITY, // Store raw gamma
+      beta: -this.currentAim.y * this.SENSITIVITY + this.calibrationOffset.beta,
+      gamma: this.currentAim.x * this.SENSITIVITY + this.calibrationOffset.gamma,
     };
   }
 
@@ -93,8 +94,9 @@ export class GyroscopeService {
     // Map to -1 to 1 range based on sensitivity
     // gamma controls X (left-right)
     // beta controls Y (forward-back, adjusted for typical holding position)
+    // Y is negated so tilting phone up moves cursor up (negative beta = negative Y = screen top)
     this.currentAim.x = Math.max(-1, Math.min(1, gamma / this.SENSITIVITY));
-    this.currentAim.y = Math.max(-1, Math.min(1, (beta - 45) / this.SENSITIVITY));
+    this.currentAim.y = Math.max(-1, Math.min(1, -(beta - 45) / this.SENSITIVITY));
   };
 
   private startUpdateLoop() {
